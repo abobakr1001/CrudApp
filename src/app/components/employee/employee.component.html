@@ -1,0 +1,64 @@
+<div class="container mt-4">
+  <h1>Employee Management</h1>
+  
+  <!-- Search -->
+  <div class="mb-4">
+    <input 
+      type="text" 
+      [ngModel]="searchTermSignal()"
+      (ngModelChange)="searchTermSignal.set($event)"
+      class="form-control" 
+      placeholder="Search by name, email, gender or skill...">
+  </div>
+
+  <!-- Employee List -->
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Gender</th>
+        <th>Skills</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let employee of filteredEmployees()">
+        <td>{{ employee.name }}</td>
+        <td>{{ employee.email }}</td>
+        <td>{{ employee.gender }}</td>
+        <td>{{ employee.skills.join(', ') }}</td>
+        <td>
+          <button (click)="editEmployee(employee)" class="btn btn-sm btn-primary me-2">Edit</button>
+          <button (click)="deleteEmployee(employee.id)" class="btn btn-sm btn-danger">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Add/Edit Modal -->
+  <div *ngIf="showModal()" class="modal d-block" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">{{ selectedEmployee() ? 'Edit' : 'Add' }} Employee</h5>
+          <button type="button" class="btn-close" (click)="closeModal()"></button>
+        </div>
+        <div class="modal-body">
+          <app-employee-form 
+            [employee]="selectedEmployee()" 
+            (save)="saveEmployee($event)">
+          </app-employee-form>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Modal Backdrop -->
+  <div *ngIf="showModal()" class="modal-backdrop fade show"></div>
+
+  <!-- Add Employee Button -->
+  <button (click)="showAddModal()" class="btn btn-success mt-3">
+    Add Employee
+  </button>
+</div>

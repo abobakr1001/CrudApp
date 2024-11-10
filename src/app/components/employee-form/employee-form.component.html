@@ -1,0 +1,52 @@
+<form [formGroup]="employeeForm" (ngSubmit)="onSubmit()" class="p-4">
+  <div class="mb-3">
+    <label class="form-label">Name:</label>
+    <input type="text" formControlName="name" class="form-control">
+    <div *ngIf="employeeForm.get('name')?.errors?.['required'] && employeeForm.get('name')?.touched" 
+         class="text-danger">
+      Name is required
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Email:</label>
+    <input type="email" formControlName="email" class="form-control">
+    <div *ngIf="employeeForm.get('email')?.errors?.['required'] && employeeForm.get('email')?.touched" 
+         class="text-danger">
+      Email is required
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Gender:</label>
+    <select formControlName="gender" class="form-select">
+      <option value="">Select Gender</option>
+      <option value="Male">Male</option>
+      <option value="Female">Female</option>
+    </select>
+    <div *ngIf="employeeForm.get('gender')?.errors?.['required'] && employeeForm.get('gender')?.touched" 
+         class="text-danger">
+      Gender is required
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Skills:</label>
+    <div formArrayName="skills">
+      <div *ngFor="let skill of skills.controls; let i=index" class="mb-2">
+        <div class="input-group">
+          <input [formControlName]="i" class="form-control">
+          <button type="button" (click)="removeSkill(i)" class="btn btn-danger">Remove</button>
+        </div>
+      </div>
+    </div>
+    <button type="button" (click)="addSkill()" class="btn btn-secondary mt-2"
+            [disabled]="skills.length >= 5">
+      Add Skill
+    </button>
+  </div>
+
+  <button type="submit" class="btn btn-primary" [disabled]="!employeeForm.valid">
+    {{ employee() ? 'Update' : 'Add' }} Employee
+  </button>
+</form>
